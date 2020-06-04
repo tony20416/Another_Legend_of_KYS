@@ -375,6 +375,44 @@ function gethead(hid, flag)
 	return headid
 end
 
+function cxxlr()--畅想新六如
+	local xlr = 0
+	if zjtype() ~= 3 then
+		return 0
+	else
+		if PersonKF(0,91) then--顺序风林火山阴雷
+			if JY.Wugong[91]["名称"] == "嘲风望气法" then
+				xlr = 1
+			elseif JY.Wugong[91]["名称"] == "狴犴啸林诀" then
+				xlr = 2
+			elseif JY.Wugong[91]["名称"] == "睚眦焚天功" then
+				xlr = 3
+			elseif JY.Wugong[91]["名称"] == "霸下擎山经" then
+				xlr = 4
+			elseif JY.Wugong[91]["名称"] == "狻猊化烟术" then
+				xlr = 5
+			elseif JY.Wugong[91]["名称"] == "蒲牢雷吼道" then
+				xlr = 6
+			elseif JY.Wugong[91]["名称"] == "六祸绝关·风" then
+				xlr = 11
+			elseif JY.Wugong[91]["名称"] == "六祸撼穹·林" then
+				xlr = 22
+			elseif JY.Wugong[91]["名称"] == "六祸焚宇·火" then
+				xlr = 33
+			elseif JY.Wugong[91]["名称"] == "六祸天险·山" then
+				xlr = 44
+			elseif JY.Wugong[91]["名称"] == "六祸九霄·阴" then
+				xlr = 55
+			elseif JY.Wugong[91]["名称"] == "六祸灭世·雷" then
+				xlr = 66
+			else 
+				xlr = 0
+			end
+		end	
+	end
+	return xlr
+end
+
 function ShowMenu3(menuItem,numItem,rownum,x1,y1,x2,y2,isBox,isEsc,size,color,selectColor,Title1,Title2,color2,color3,linenum, flag)
     local w = 0
     local h = 0
@@ -10838,7 +10876,7 @@ function War_WugongHurtLife(emenyid, wugong, level, ang)
 				end
 			end
 			if WAR.Person[emenyid][CC.TXWZ3] ~= nil and str ~= "" then
-				WAR.Person[emenyid][CC.TXWZ3] = WAR.Person[id][CC.TXWZ3].."+"..str
+				WAR.Person[emenyid][CC.TXWZ3] = WAR.Person[emenyid][CC.TXWZ3].."+"..str
 			else
 				WAR.Person[emenyid][CC.TXWZ3] = str
 			end
@@ -55853,17 +55891,19 @@ end
 	          
 	        --主角，其疾如风，集气350，其他人100
 	        if WAR.FLHS1 == 1 then
-	          if id == 0 then
-	            WAR.Person[p].Time = WAR.Person[p].Time + 350
-	          end
-				--[[for i = 0, WAR.PersonNum - 1 do
-					if WAR.Person[i]["我方"] == true and WAR.Person[i]["死亡"] == false and WAR.Person[i]["人物编号"] ~= 0 then
-						WAR.Person[i].Time = WAR.Person[i].Time + 100;
-						if WAR.Person[i].Time > 999 then
-							WAR.Person[i].Time = 999;
+				if id == 0 then
+					WAR.Person[p].Time = WAR.Person[p].Time + 350
+				end
+				if cxxlr() == 1 and id == 0 then
+					for i = 0, WAR.PersonNum - 1 do
+						if WAR.Person[i]["我方"] == WAR.Person[p]["我方"] and WAR.Person[i]["死亡"] == false and WAR.Person[i]["人物编号"] ~= 0 then
+							WAR.Person[i].Time = WAR.Person[i].Time + 100;
+							if WAR.Person[i].Time > 999 then
+								WAR.Person[i].Time = 999;
+							end
 						end
-					end
-				end		]]	  
+					end	  
+				end	
 	          WAR.FLHS1 = 0
 	        end
 			if hasTF(id, 152) and JLSD(0, 50, id) then
@@ -57693,6 +57733,10 @@ end
 				if WAR.Person[p].Time > 999 then 
 			        WAR.Person[p].Time = 999
 			    end
+			elseif WAR.Person[p]["人物编号"] == 0 and cxxlr() == 11 and WAR.Person[p].Time > 999 then --最大600集气，改了
+	            WAR.Person[p].Time = 999
+			elseif WAR.Person[p]["人物编号"] == 0 and cxxlr() == 1 and WAR.Person[p].Time > 800 then --最大600集气，改了
+	            WAR.Person[p].Time = 800	
 			elseif 600 < WAR.Person[p].Time then --最大600集气，改了
 	            WAR.Person[p].Time = 600
 	        end
@@ -79830,7 +79874,7 @@ function NEvent7(keypress)
 						QZXS("藏镜人领悟袭地贯天！")
 						Talk("谁敢动忆无心！！！！",0);
 						instruct_0()
-						QZXS("藏镜人化身天地不容客，领悟天地藏镜人初次觉醒时，不容战法！")
+						QZXS("藏镜人化身天地不容客，领悟天地不容战法！")
 					end
 					if T12YMZ(0) then
 						Talk("二十年梨花枪，天下无敌手，却深感武学无止境，人无完人，法无定法，如今，更当再攀新峰。",0);
@@ -79992,8 +80036,79 @@ function NEvent7(keypress)
 					addHZ(153)
 					addHZ(154)
 					addHZ(155)
-				elseif ts > 6 and juexing() > 0 then--畅想洗六如二阶
-					
+				elseif ts > 6 and juexing() == 1 and cxxlr() == 0 then--畅想洗六如二阶
+					say("你又来了。看来你的武学又有所精进", 260, 0, CC.EVB26)
+					say("你对「六如」这套战法的感想如何？", 260, 0, CC.EVB26)
+					say("感觉非常神奇...似乎不是一个常见的力量", 0)
+					say("我也不曾在其他人身上看到过这种力量", 0)
+					say("感觉很敏锐嘛，没错，六如是「圣堂」的力量", 260, 0, CC.EVB26)
+					say("至于圣堂是什么就别多问了，以后你会知道的。", 260, 0, CC.EVB26)
+					say("而与另外一些受到圣堂影响的人不同", 260, 0, CC.EVB26)
+					say("圣堂有意愿让你进一步挖掘「六如」的力量", 260, 0, CC.EVB26)
+					say("根据你自己的武学道路，在「六如」中选一个进步方向吧。", 260, 0, CC.EVB26)
+					Cls()
+					local hh2 = JYMsgBox("六如进化方向", "请选择六如的进化方向？", {"风", "林", "火", "山", "阴", "雷"}, 6, 0)	
+					if hh2 <= 0 then
+						return 0
+					end	
+					if hh2 == 1 then 
+						JY.Wugong[91][CC.EVB42] = "嘲风望气法"
+					elseif hh2 == 2 then
+						JY.Wugong[91][CC.EVB42] = "狴犴啸林诀"
+					elseif hh2 == 3 then
+						JY.Wugong[91][CC.EVB42] = "睚眦焚天功"
+					elseif hh2 == 4 then
+						JY.Wugong[91][CC.EVB42] = "霸下擎山经"
+					elseif hh2 == 5 then
+						JY.Wugong[91][CC.EVB42] = "狻猊化烟术"
+					elseif hh2 == 6 then
+						JY.Wugong[91][CC.EVB42] = "蒲牢雷吼道"
+					end
+					Cls()
+					say("啊...力量充盈的感觉真好", 0)
+					say("多谢。", 0)
+					say("记住，力量无分善恶，纯依使用之人为断。", 260, 0, CC.EVB26)
+					--[[local menu1 = {}
+					local menu1callback = function(selected1, personid)
+						local menu2 = {}
+						local menu2callback = function(selected2, wgid)
+							if DrawStrBoxYesNo(-1,-1,"是否设置为其他武功？",C_WHITE,CC.DefaultFont) then
+								local menu3 = {}
+								local menu3callback = function(selected3, replace_wgid)
+									JY.Person[personid]["武功" .. selected2] = replace_wgid
+									JY.Person[personid]["武功等级" .. selected2] = 999
+									QZXS(JY.Person[personid]["姓名"] .. "的" .. JY.Wugong[wgid]["名称"].."已经替换为".. JY.Wugong[replace_wgid]["名称"])
+								end
+								local r2 = JYMsgBox("天赋武功", "请选择天赋武功的类型", {"拳", "剑", "刀", "特", "暗", "内", "轻"}, 7, 0)
+								local boxdata1 = {1,2,3,4,6,0,5}
+								local leixing = boxdata1[r2]
+								if leixing ~= nil then
+									for i,v in pairs(JY.Wugong) do
+										if JY.Wugong[i]["类型"] == leixing then
+											menu3[#menu3 + 1] = {i .. JY.Wugong[i]["名称"], i, menu3callback}
+										end
+									end
+									diymenu(menu3)
+								end
+							end
+						end
+						for i = 1, HHH_GAME_SETTING["WG_COUNT_MAX"] do
+							local wugong = JY.Person[personid]["武功" .. i]
+							if wugong > 0 then
+								menu2[#menu2 + 1] = {i .. JY.Wugong[wugong]["名称"], wugong, menu2callback}
+							else
+								menu2[#menu2 + 1] = {i .. "----", wugong, menu2callback}
+							end
+						end
+						diymenu(menu2)
+					end
+					for i = 1, CC.TeamNum do
+						local personid = JY.Base["队伍" .. i]
+						if JY.Base["队伍" .. i] >= 0 then
+							menu1[#menu1 + 1] = {personid .. JY.Person[personid]["姓名"], personid, menu1callback}
+						end 
+					end
+					diymenu(menu1)]]
 				else
 					say(CC.EVB51, 260, 0, CC.EVB26)
 				end
@@ -80086,37 +80201,68 @@ function NEvent7(keypress)
 end--挑战张三丰，得到六如
 
 function NEvent8(keypress)
-  if JY.SubScene == 43 and GetS(10, 0, 12, 0) == 1 and JY.Base[CC.EVB1] == 17 and JY.Base[CC.EVB2] == 27 and JY.Base[CC.EVB3] == 2 and keypress == VK_SPACE then
-    say(CC.EVB52, 5)
-    say(CC.EVB53, 5)
-    if DrawStrBoxYesNo(-1, -1, CC.EVB54, C_WHITE, CC.DefaultFont) then
-      if WarMain(22) then
-        PlayMIDI(3)
-        say(CC.EVB55, 5)
-        say(CC.EVB56)
-        say(CC.EVB57)
-        CLJDH()
-        DrawStrBoxWaitKey(string.format(CC.EVB58, JY.Person[0][CC.EVB59]), C_ORANGE, 30)
-        JY.Wugong[91][CC.EVB60] = CC.EVB61
-        JY.Wugong[91][CC.EVB62] = 1600
-        SetS(10, 0, 12, 0, 0)
-		if MPPD(0) == 4 then
-			SetD(43, 4, 2, 31021)
+	if JY.SubScene == 43 and GetS(10, 0, 12, 0) == 1 and JY.Base[CC.EVB1] == 17 and JY.Base[CC.EVB2] == 27 and JY.Base[CC.EVB3] == 2 and keypress == VK_SPACE then
+		say(CC.EVB52, 5)
+		say(CC.EVB53, 5)
+		if DrawStrBoxYesNo(-1, -1, CC.EVB54, C_WHITE, CC.DefaultFont) then
+			if WarMain(22) then
+				if zjtype() ~= 3 then
+					PlayMIDI(3)
+					say(CC.EVB55, 5)
+					say(CC.EVB56)
+					say(CC.EVB57)
+					CLJDH()
+					DrawStrBoxWaitKey(string.format(CC.EVB58, JY.Person[0][CC.EVB59]), C_ORANGE, 30)
+					JY.Wugong[91][CC.EVB60] = CC.EVB61
+					JY.Wugong[91][CC.EVB62] = 1600
+					SetS(10, 0, 12, 0, 0)
+					if MPPD(0) == 4 then
+						SetD(43, 4, 2, 31021)
+					else
+						SetD(43, 4, 2, 314)
+					end
+					SetS(10, 0, 11, 0, 1) --领悟隼旋
+					SetS(80, 48, 36, 3, 100)
+					instruct_3(80, 100, 0, 0, 0, 0, 2002, 0, 0, 0, 0, -2, -2)
+					say(CC.EVB63, 5)
+				else
+					PlayMIDI(3)
+					say(CC.EVB55, 5)
+					say(CC.EVB56)
+					say(CC.EVB57)
+					if cxxlr() == 1 then
+						JY.Wugong[91][CC.EVB60] = "六祸绝关·风"
+					elseif cxxlr() == 2 then
+						JY.Wugong[91][CC.EVB60] = "六祸撼穹·林"	
+					elseif cxxlr() == 3 then
+						JY.Wugong[91][CC.EVB60] = "六祸焚宇·火"
+					elseif cxxlr() == 4 then
+						JY.Wugong[91][CC.EVB60] = "六祸天险·山"
+					elseif cxxlr() == 5 then
+						JY.Wugong[91][CC.EVB60] = "六祸九霄·阴"
+					elseif cxxlr() == 6 then
+						JY.Wugong[91][CC.EVB60] = "六祸灭世·雷"
+					end	
+					DrawStrBoxWaitKey(string.format("%s领悟六祸禁式【"..JY.Wugong[91][CC.EVB60].."】", JY.Person[0][CC.EVB59]), C_ORANGE, 30)
+					JY.Wugong[91][CC.EVB62] = 1600
+					SetS(10, 0, 12, 0, 0)
+					if MPPD(0) == 4 then
+						SetD(43, 4, 2, 31021)
+					else
+						SetD(43, 4, 2, 314)
+					end
+					--SetS(10, 0, 11, 0, 1) --领悟隼旋
+					SetS(80, 48, 36, 3, 100)
+					--instruct_3(80, 100, 0, 0, 0, 0, 2002, 0, 0, 0, 0, -2, -2)
+					say(CC.EVB63, 5)
+				end	
+			else
+				say(CC.EVB64, 5)--打输
+			end
 		else
-			SetD(43, 4, 2, 314)
+			say(CC.EVB65, 5)--不挑战
 		end
-        SetS(10, 0, 11, 0, 1) --领悟隼旋
-        SetS(80, 48, 36, 3, 100)
-        instruct_3(80, 100, 0, 0, 0, 0, 2002, 0, 0, 0, 0, -2, -2)
-        say(CC.EVB63, 5)
-        
-      else
-      	say(CC.EVB64, 5)
-      end
-    else
-    	say(CC.EVB65, 5)
-    end
-  end
+	end
 end--武道大会，直接挑战十五大
 function NEvent9(keypress)
   if JY.SubScene == 25 and GetS(10, 0, 8, 0) ~= 1 and GetD(25, 74, 5) == 2610 then
